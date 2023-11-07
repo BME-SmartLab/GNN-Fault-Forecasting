@@ -6,6 +6,8 @@ R. Lovas, E. Rigó, D. Unyi, B. Gyires-Tóth, Revolutionizing Cloud Service Debu
 
 If you need more data, code or information about our work, please contact the corresponding author: Róbert Lovas (robert.lovas (at) sztaki.hu)
 
+![alt text](https://github.com/BME-SmartLab/GNN-SLA-Forecast/blob/main/dataflow.png)
+
 ## Acknowledgement
 
 The work reported in this paper, carried out as a collaboration between HUN-REN SZTAKI and BME, has been partly supported by the the European Union project RRF-2.3.1-21-2022-00004 within the framework of the Artificial Intelligence National Laboratory.
