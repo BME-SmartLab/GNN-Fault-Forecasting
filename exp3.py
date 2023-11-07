@@ -25,8 +25,8 @@ train = True
 
 ####################################################################################################
 
-data_path = '~/src/GNN-SLA-Forecast/data/rest-tree4/data'
-log_path = '~/src/GNN-SLA-Forecast/runs/rest-tree4/hidden_{}_lr_{}_weight_decay_{}_epochs_{}_batch_size_{}'.format(hidden, lr, weight_decay, epochs, batch_size)
+data_path = '~/GNN-SLA-Forecast/data/rest-tree4/data'
+log_path = '~/GNN-SLA-Forecast/runs/rest-tree4/hidden_{}_lr_{}_weight_decay_{}_epochs_{}_batch_size_{}'.format(hidden, lr, weight_decay, epochs, batch_size)
 
 data_path = os.path.expanduser(data_path)
 log_path = os.path.expanduser(log_path)

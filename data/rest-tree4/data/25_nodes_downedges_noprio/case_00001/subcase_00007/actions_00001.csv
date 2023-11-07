@@ -1,0 +1,11 @@
+,from,to,method,action,result
+0,X0,X22,GET,req,
+1,X22,X24,GET,req,
+2,X24,X10,GET,req,
+3,X24,X10,GET,resp,2xx
+4,X22,X24,GET,resp,2xx
+5,X0,X22,GET,resp,2xx
+6,X0,X23,GET,req,
+7,X23,X20,GET,req,
+8,X20,X11,GET,req,
+9,X20,X11,GET,resp,2xx

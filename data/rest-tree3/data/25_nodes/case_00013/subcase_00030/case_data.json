@@ -1,0 +1,1 @@
+{"case_no": 13, "subcase_no": 30, "case_count": 50, "node_count": 25, "p_node_fail_min": 0.01, "p_node_fail_max": 0.3, "retires_min": 1, "retires_max": 2, "path_len": 2000, "path_count": 1, "sla": 6.658854739327345e-11}
