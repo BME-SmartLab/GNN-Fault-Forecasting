@@ -8,10 +8,27 @@ If you need more data, code or information about our work, please contact the co
 
 ![alt text](https://github.com/BME-SmartLab/GNN-SLA-Forecast/blob/main/dataflow.png)
 
+## Build the docker image
+
+First build the docker image using the Dockerfile in this repository:
+```
+docker build -t sla-forecast .
+```
+Then run the docker image interactively:
+```
+docker run -it sla-forecast
+```
+And then execute the experiment you are interested in:
+```
+python exp1.py
+```
+
 ## Acknowledgement
 
+<p align="justify">
 The work reported in this paper, carried out as a collaboration between HUN-REN SZTAKI and BME, has been partly supported by the the European Union project RRF-2.3.1-21-2022-00004 within the framework of the Artificial Intelligence National Laboratory.
 This work was partially funded by the National Research, Development and Innovation Office (NKFIH) under OTKA Grant Agreement No. K 132838.
 The presented work of R. Lovas was also supported by the János Bolyai Research Scholarship of the Hungarian Academy of Sciences.
 The presented work of D. Unyi was also supported by the ÚNKP-23-3-II-BME-399 New National Excellence Program of the Ministry for Culture and Innovation from the source of the National Research, Development and Innovation Fund.
 On behalf of the 'MILAB - SmartLab' cloud project, we are grateful for the possibility to use ELKH Cloud \cite{mihalyhederPresentFutureELKH2022} which helped us achieve the results published in this paper.
+</p>
