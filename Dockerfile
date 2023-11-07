@@ -8,8 +8,8 @@ RUN apt-get update -y && apt-get install -y --no-install-recommends \
     htop \
     openssh-server \
     zip \
-	unzip \
-	build-essential
+    unzip \
+    build-essential
 
 RUN rm -rf /var/lib/apt/lists/*
 
@@ -21,3 +21,7 @@ RUN useradd -m -s /bin/bash myusername
 WORKDIR /home/myusername
 
 USER myusername
+
+RUN git clone https://github.com/BME-SmartLab/GNN-SLA-Forecast.git && cd GNN-SLA-Forecast
+
+WORKDIR /home/myusername/GNN-SLA-Forecast
