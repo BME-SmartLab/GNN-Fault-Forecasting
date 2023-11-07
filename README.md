@@ -49,5 +49,5 @@ If you use our code or results, please cite our paper:
   This work was partially funded by the National Research, Development and Innovation Office (NKFIH) under OTKA Grant Agreement No. K 132838.
   The presented work of R. Lovas was also supported by the János Bolyai Research Scholarship of the Hungarian Academy of Sciences.
   The presented work of D. Unyi was also supported by the ÚNKP-23-3-II-BME-399 New National Excellence Program of the Ministry for Culture and Innovation from the source of the National Research, Development and Innovation Fund.
-  On behalf of the 'MILAB - SmartLab' cloud project, we are grateful for the possibility to use ELKH Cloud \cite{mihalyhederPresentFutureELKH2022} which helped us achieve the results published in this paper.
+  On behalf of the 'MILAB - SmartLab' cloud project, we are grateful for the possibility to use ELKH Cloud which helped us achieve the results published in this paper.
 </p>
