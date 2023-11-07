@@ -2,7 +2,11 @@
 
 This repository contains supplementary materials for the paper:
 
-R. Lovas, E. Rigó, D. Unyi, B. Gyires-Tóth, Revolutionizing Cloud Service Debugging: A GNN-Driven Approach to SLA Forecasting, under review
+<b>
+  R. Lovas, E. Rigó, D. Unyi, B. Gyires-Tóth
+  
+  Revolutionizing Cloud Service Debugging: A GNN-Driven Approach to SLA Forecasting (under review)
+</b>
 
 If you need more data, code or information about our work, please contact the corresponding author: Róbert Lovas (robert.lovas (at) sztaki.hu)
 
