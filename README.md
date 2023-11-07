@@ -12,17 +12,21 @@ If you need more data, code or information about our work, please contact the co
 
 ![alt text](https://github.com/BME-SmartLab/GNN-SLA-Forecast/blob/main/dataflow.png)
 
-## Build the docker image
+## How to Run the Experiments
 
-First build the docker image using the Dockerfile in this repository:
+First clone our repository:
+```
+git clone https://github.com/BME-SmartLab/GNN-SLA-Forecast && cd GNN-SLA-Forecast
+```
+Then build the docker image using our Dockerfile:
 ```
 docker build -t sla-forecast .
 ```
-Then run the docker image interactively:
+Next run the docker image interactively, mounting our repository into the container:
 ```
-docker run -it sla-forecast
+docker run -it -e USERNAME=myusername --mount type=bind,source=$(pwd),target=/home/myusername/GNN-SLA-Forecast sla-forecast
 ```
-And then execute the experiment you are interested in:
+And voilà, you can execute the experiment you are interested in:
 ```
 python exp1.py
 ```
