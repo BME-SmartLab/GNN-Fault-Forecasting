@@ -22,7 +22,9 @@ class GNBlock(nn.Module):
 class GNN(nn.Module):
     def __init__(self, indim, hiddendim, outdim):
       super().__init__()
-      self.act = torch.relu
+      self.indim = indim
+      self.hiddendim = hiddendim
+      self.outdim = outdim
       self.conv1 = GNBlock(indim, hiddendim)
       self.conv2 = GNBlock(hiddendim, hiddendim)
       self.conv3 = GNBlock(hiddendim, hiddendim)
@@ -34,7 +36,7 @@ class GNN(nn.Module):
         print('WARNING: GPU not available. Using CPU instead.')
       self.to(self.device)
       self.optimizer = None
-      self.criterion = nn.MSELoss()
+      self.criterion = F.mse_loss
 
     def forward(self, data):
       x = data.x
