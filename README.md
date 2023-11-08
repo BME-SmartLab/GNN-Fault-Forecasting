@@ -24,7 +24,7 @@ docker build -t sla-forecast .
 ```
 Next run the docker image interactively, mounting our repository into the container:
 ```
-docker run -it -e USERNAME=myusername --mount type=bind,source=$(pwd),target=/home/myusername/GNN-SLA-Forecast sla-forecast
+docker run -it -e USERNAME=myusername --gpus all --mount type=bind,source=$(pwd),target=/home/myusername/GNN-SLA-Forecast sla-forecast
 ```
 And voilà, you can execute the experiment you are interested in:
 ```
