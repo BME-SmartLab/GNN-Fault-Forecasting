@@ -19,6 +19,7 @@ weight_decay = 0.002
 epochs = 200
 batch_size = 32
 lambda_ = 0.001
+accepted_mask_size = 1./3.
 
 train_split, val_split, test_split = (0.8, 0.1, 0.1)
 
@@ -178,7 +179,7 @@ if train_actor:
     for epoch in range(epochs):
         train_loss, train_mask_size, train_critic_pos_mae, train_critic_neg_mae, train_baseline_mae = actor.train_batch(train_loader, critic, baseline)
         val_loss, val_mask_size, val_critic_pos_mae, val_critic_neg_mae, val_baseline_mae = actor.test_batch(val_loader, critic, baseline)
-        if val_critic_pos_mae < best_val_mae:
+        if val_critic_pos_mae < best_val_mae and val_mask_size < accepted_mask_size:
             best_val_mae = val_critic_pos_mae
             torch.save(actor.state_dict(), os.path.join(log_path, 'actor.pt'))
         writer.add_scalar('ACTOR/train_loss', train_loss, epoch)
