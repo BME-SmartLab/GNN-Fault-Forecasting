@@ -198,6 +198,10 @@ if train_actor:
                     Val critic pos MAE: {val_critic_pos_mae:.4f}, Val critic neg MAE: {val_critic_neg_mae:.4f}, Val baseline MAE: {val_baseline_mae:.4f}')
 
 actor.load_state_dict(torch.load(os.path.join(log_path, 'actor.pt')))
+val_loss, val_mask_size, val_critic_pos_mae, val_critic_neg_mae, val_baseline_mae = actor.test_batch(val_loader, critic, baseline)
+print(f'Val loss: {val_loss:.4f}, Val mask size: {val_mask_size:.4f}, Val critic pos MAE: {val_critic_pos_mae:.4f}, Val critic neg MAE: {val_critic_neg_mae:.4f}, Val baseline MAE: {val_baseline_mae:.4f}')
+test_loss, test_mask_size, test_critic_pos_mae, test_critic_neg_mae, test_baseline_mae = actor.test_batch(test_loader, critic, baseline)
+print(f'Test loss: {test_loss:.4f}, Test mask size: {test_mask_size:.4f}, Test critic pos MAE: {test_critic_pos_mae:.4f}, Test critic neg MAE: {test_critic_neg_mae:.4f}, Test baseline MAE: {test_baseline_mae:.4f}')
 
 if train:
     writer.close()
