@@ -39,7 +39,6 @@ class ActorGNN(nn.Module):
         self.to(self.device)
         self.optimizer = None
         self.lambda_ = lambda_
-        self.optimizer = None
         self.critic = critic
         self.baseline = baseline
     
