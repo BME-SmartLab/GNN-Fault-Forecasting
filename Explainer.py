@@ -127,7 +127,7 @@ class ActorGNN(nn.Module):
                         sum(baseline_maes)/len(baseline_maes)
     
     @torch.no_grad()
-    def predict_batch(self, loader):
+    def predict_batch(self, loader, critic, baseline):
         self.eval()
         y_probs = []
         y_masks = []
