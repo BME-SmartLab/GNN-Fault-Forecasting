@@ -1,30 +1,30 @@
-# Revolutionizing Cloud Service Debugging: Explainable GNN-based Approach to SLA Forecasting
+# Explainable GNN-based Approach to Fault Forecasting in Cloud Service Debugging
 
 This repository contains supplementary materials for the paper:
 
 <b>
   R. Lovas, E. Rigó, D. Unyi, B. Gyires-Tóth
   
-  Revolutionizing Cloud Service Debugging: Explainable GNN-based Approach to SLA Forecasting (under review)
+  Explainable GNN-based Approach to Fault Forecasting in Cloud Service Debugging (under review)
 </b>
 
 If you need more data, code or information about our work, please contact the corresponding author: Róbert Lovas (robert.lovas (at) sztaki.hu)
 
-![alt text](https://github.com/BME-SmartLab/GNN-SLA-Forecast/blob/main/dataflow.png)
+![alt text](https://github.com/BME-SmartLab/GNN-Fault-Forecasting/blob/main/dataflow.png)
 
 ## How to Run the Experiments
 
 First clone our repository:
 ```
-git clone https://github.com/BME-SmartLab/GNN-SLA-Forecast && cd GNN-SLA-Forecast
+git clone https://github.com/BME-SmartLab/GNN-Fault-Forecasting && cd GNN-Fault-Forecasting
 ```
 Then build the docker image using our Dockerfile:
 ```
-docker build -t sla-forecast .
+docker build -t gnn-fault-forecasting .
 ```
 Next run the docker image interactively, mounting our repository into the container:
 ```
-docker run -it -e USERNAME=myusername --gpus all --mount type=bind,source=$(pwd),target=/home/myusername/GNN-SLA-Forecast sla-forecast
+docker run -it -e USERNAME=myusername --gpus all --mount type=bind,source=$(pwd),target=/home/myusername/GNN-Fault-Forecasting gnn-fault-forecasting
 ```
 And voilà, you can execute the experiment you are interested in:
 ```
@@ -48,6 +48,5 @@ If you use our code or results, please cite our paper:
   The work reported in this paper, carried out as a collaboration between HUN-REN SZTAKI and BME, has been partly supported by the the European Union project RRF-2.3.1-21-2022-00004 within the framework of the Artificial Intelligence National Laboratory.
   This work was partially funded by the National Research, Development and Innovation Office (NKFIH) under OTKA Grant Agreement No. K 132838.
   The presented work of R. Lovas was also supported by the János Bolyai Research Scholarship of the Hungarian Academy of Sciences.
-  The presented work of D. Unyi was also supported by the ÚNKP-23-3-II-BME-399 New National Excellence Program of the Ministry for Culture and Innovation from the source of the National Research, Development and Innovation Fund.
-  On behalf of the 'MILAB - SmartLab' cloud project, we are grateful for the possibility to use ELKH Cloud which helped us achieve the results published in this paper.
+  On behalf of the ‘MILAB - SmartLab' cloud project, we are grateful for the possibility to use HUN-REN Cloud which helped us achieve the results published in this paper.
 </p>
