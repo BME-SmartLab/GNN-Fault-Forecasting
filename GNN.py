@@ -4,13 +4,12 @@ import torch.nn.functional as F
 import torch_geometric.nn as gnn
 from GNLayer import GNLayer
 
-
 class GNBlock(nn.Module):
-    def __init__(self, indim, outdim):
+    def __init__(self, in_channels, out_channels):
         super().__init__()
-        self.conv = GNLayer(indim, outdim, outdim, 0)
+        self.conv = GNLayer(in_channels, out_channels, out_channels, 0)
         self.act = nn.PReLU()
-        self.norm = nn.BatchNorm1d(outdim)
+        self.norm = gnn.BatchNorm(out_channels)
 
     def forward(self, x, edge_index, edge_attr=None):
         x = self.conv(x, edge_index, edge_attr)
@@ -18,19 +17,18 @@ class GNBlock(nn.Module):
         x = self.norm(x)
         return x
 
-
 class GNN(nn.Module):
-    def __init__(self, indim, hiddendim, outdim):
+    def __init__(self, in_channels, hidden_channels, out_channels):
       super().__init__()
-      self.indim = indim
-      self.hiddendim = hiddendim
-      self.outdim = outdim
-      self.conv1 = GNBlock(indim, hiddendim)
-      self.conv2 = GNBlock(hiddendim, hiddendim)
-      self.conv3 = GNBlock(hiddendim, hiddendim)
-      self.conv4 = GNBlock(hiddendim, hiddendim)
+      self.in_channels = in_channels
+      self.hidden_channels = hidden_channels
+      self.out_channels = out_channels
+      self.conv1 = GNBlock(in_channels, hidden_channels)
+      self.conv2 = GNBlock(hidden_channels, hidden_channels)
+      self.conv3 = GNBlock(hidden_channels, hidden_channels)
+      self.conv4 = GNBlock(hidden_channels, hidden_channels)
       self.pool = gnn.global_mean_pool
-      self.head = gnn.MLP([hiddendim, hiddendim, outdim], norm=None)
+      self.head = gnn.MLP([hidden_channels, hidden_channels, out_channels], norm=None)
       self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
       if self.device != torch.device('cuda'):
         print('WARNING: GPU not available. Using CPU instead.')
