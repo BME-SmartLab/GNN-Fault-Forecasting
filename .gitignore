@@ -1,4 +1,6 @@
 __pycache__
 runs
-data/rest-tree3/data/processed
-data/rest-tree4/data/processed
+data/rest-tree3/data/processed/*
+data/rest-tree4/data/processed/*
+*.pth
+*.pt

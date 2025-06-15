@@ -58,6 +58,7 @@ class FaultForecastingDataset(InMemoryDataset):
                     data.case = case_no
                     data.subcase = subcase_no
                     # data.x = torch.ones((len(g), 1)) # if using dummy features instead of p_fail and retries
+                    data.node_type = torch.tensor([0 if out_degree == 1 else 0 for _, out_degree in g.out_degree], dtype=torch.long)  # 0 for intermediary nodes, 1 for leaf nodes
                     data.x = torch.tensor(features)
                     data.y = torch.tensor(p_fault)
                     data.batch = torch.full([len(g)], len(data_list) - 1)
