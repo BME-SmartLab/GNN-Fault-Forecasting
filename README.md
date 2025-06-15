@@ -26,9 +26,10 @@ Next run the docker image interactively, mounting our repository into the contai
 ```
 docker run -it -e USERNAME=myusername --gpus all --mount type=bind,source=$(pwd),target=/home/myusername/GNN-Fault-Forecasting gnn-fault-forecasting
 ```
-And voilà, you can execute the experiment you are interested in:
+And voilà, you can train the fault forecasting model or the fault explainability model:
 ```
-python exp1.py
+python train_fault_forecasting_model.py
+python train_fault_explainer_model.py
 ```
 
 ## Citing
