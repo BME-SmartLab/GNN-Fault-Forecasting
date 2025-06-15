@@ -12,7 +12,7 @@ from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 import warnings
 warnings.filterwarnings("ignore", category=RuntimeWarning)
 
-torch.manual_seed(0)
+torch.manual_seed(123)
 
 # Load hyperparameters from a YAML file
 config_path = os.path.expanduser('~/GNN-Fault-Forecasting/config.yaml')
@@ -78,15 +78,6 @@ def compute_spectral_features(data, n_components, num_buckets):
         buckets = bucketize_feature(coord, k=num_buckets)
         bucket_list.append(buckets)
     spec_feat = torch.cat(bucket_list)
-
-    # spec_feat = torch.cat([
-    #     spec_feat,
-    #     embedding.mean(axis=0),
-    #     embedding.std(axis=0),
-    #     embedding.max(axis=0)[0],
-    #     embedding.min(axis=0)[0],
-    # ])
-
     return spec_feat
 
 def build_feature_matrix(dataset, num_buckets=6, use_spec=True, num_spec_components=2):
@@ -107,14 +98,6 @@ def build_feature_matrix(dataset, num_buckets=6, use_spec=True, num_spec_compone
             leaf_feat1,
             leaf_feat2,
         ])
-
-        # feat = torch.cat([
-        #     data.x.mean(dim=0),
-        #     data.x.std(dim=0),
-        #     data.x.max(dim=0)[0],
-        #     data.x.min(dim=0)[0],
-        # ])
-
         if use_spec:
             spec_feat = compute_spectral_features(data, data.num_nodes-1, num_buckets=num_buckets)
             feat = torch.cat([feat, spec_feat], dim=0)
@@ -130,7 +113,7 @@ class SimpleNN(nn.Module):
         self.fc2 = nn.Linear(hidden_dim, 1)
 
     def forward(self, x):
-        x = F.relu(self.fc1(x))
+        x = F.leaky_relu(self.fc1(x))
         x = self.fc2(x)
         return x
     
@@ -226,11 +209,10 @@ def train_and_evaluate(train_set, val_set, test_set, config, mode="linreg", num_
             test_loss = criterion(y_test_pred, y_test)
             test_mae = mean_absolute_error(y_test.numpy(), y_test_pred.numpy())
             test_r2 = r2_score(y_test.numpy(), y_test_pred.numpy())
-            # print(f'Neural Network with bucketized node and spectral features: Test Loss: {test_loss:.4f}, Test MAE: {test_mae:.4f}, Test R2: {test_r2:.4f}')
+            print(f'Neural Network with bucketized node and spectral features: Test Loss: {test_loss:.4f}, Test MAE: {test_mae:.4f}, Test R2: {test_r2:.4f}')
 
-for num_buckets in [3, 5, 6]:
-    print(f"Training with {num_buckets} buckets:")
-    # Linear Regression
-    train_and_evaluate(train_set, val_set, test_set, config, mode="linreg", num_buckets=num_buckets, use_spec=True)
-    # Neural Network
-    train_and_evaluate(train_set, val_set, test_set, config, mode="nn", num_buckets=num_buckets, use_spec=True)
+
+# Linear Regression
+train_and_evaluate(train_set, val_set, test_set, config, mode="linreg", num_buckets=5, use_spec=True)
+# Neural Network
+train_and_evaluate(train_set, val_set, test_set, config, mode="nn", num_buckets=5, use_spec=True)
