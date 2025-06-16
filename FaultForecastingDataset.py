@@ -3,7 +3,11 @@ import pandas as pd
 import networkx as nx
 import torch
 from torch_geometric.data import Data, InMemoryDataset
-from torch_geometric.utils import to_undirected
+from torch_geometric.utils import to_undirected, to_dense_adj
+from sklearn.manifold import SpectralEmbedding
+
+import warnings
+warnings.filterwarnings("ignore", category=RuntimeWarning)
 
 class FaultForecastingDataset(InMemoryDataset):
     """Dataset for fault forecasting in service meshes.
@@ -58,7 +62,11 @@ class FaultForecastingDataset(InMemoryDataset):
                     data.case = case_no
                     data.subcase = subcase_no
                     # data.x = torch.ones((len(g), 1)) # if using dummy features instead of p_fail and retries
-                    data.node_type = torch.tensor([0 if out_degree == 1 else 0 for _, out_degree in g.out_degree], dtype=torch.long)  # 0 for intermediary nodes, 1 for leaf nodes
+                    data.node_type = torch.tensor([0 if out_degree == 1 else 0 for _, out_degree in g.out_degree], dtype=torch.long)
+                    # spectral embeddings are added in case we want to use them
+                    embedding = SpectralEmbedding(n_components=len(g)-1, affinity='precomputed')
+                    spectral_features = embedding.fit_transform(to_dense_adj(data.edge_index).squeeze().numpy())
+                    data.spectral_embeddings = torch.tensor(spectral_features, dtype=torch.float)
                     data.x = torch.tensor(features)
                     data.y = torch.tensor(p_fault)
                     data.batch = torch.full([len(g)], len(data_list) - 1)
