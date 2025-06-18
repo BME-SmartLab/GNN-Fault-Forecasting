@@ -52,9 +52,14 @@ train_loader = DataLoader(train_set, batch_size=batch_size, shuffle=True)
 val_loader = DataLoader(val_set, batch_size=len(val_set))
 test_loader = DataLoader(test_set, batch_size=len(test_set))
 
-model = GNN(2, hidden_size, 1)
-model.optimizer = torch.optim.AdamW(model.parameters(), lr=lr, weight_decay=weight_decay)
-print(model)
+model = GNN(
+    learning_rate=lr,
+    weight_decay=weight_decay,
+    in_channels=2,
+    num_layers=4,
+    hidden_channels=hidden_size,
+    out_channels=1,
+)
 
 if train:
     best_val_mae = float('inf')
