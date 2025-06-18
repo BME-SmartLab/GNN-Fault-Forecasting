@@ -78,7 +78,7 @@ if train:
 
     writer.close()
 
-model.load_state_dict(torch.load(os.path.join(log_path, 'gnn.pt')))
+model.load_state_dict(torch.load(os.path.join(log_path, 'gnn.pt'), weights_only=True))
 val_loss, val_mae = model.test_batch(val_loader)
 print(f'Val loss: {val_loss:.4f}, Val MAE: {val_mae:.4f}')
 test_loss, test_mae = model.test_batch(test_loader)

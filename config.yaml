@@ -6,3 +6,8 @@ batch_size: 32
 train: true # whether to train the model
 tree: true # whether to load the tree dataset or the DAG dataset
 splits: [0.8, 0.1, 0.1] # train, val, test split ratios
+
+# for explainability
+train_baseline: true # whether to train a baseline model (which we want to explain)
+train_explainer: true # whether to train the explainer model
+target_sparsity: 0.33 # sparsity of the explainer model

@@ -50,7 +50,7 @@ class GNN(nn.Module):
       if self.device != torch.device('cuda'):
         print('WARNING: GPU not available. Using CPU instead.')
       self.to(self.device)
-      self.optimizer =  torch.optim.AdamW(self.parameters(), lr=learning_rate, weight_decay=weight_decay)
+      self.optimizer =  torch.optim.Adam(self.parameters(), lr=learning_rate)
       self.criterion = F.mse_loss
     
     def forward(self, data):
