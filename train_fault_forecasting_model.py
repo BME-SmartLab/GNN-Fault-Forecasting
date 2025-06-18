@@ -1,5 +1,6 @@
 import os
 import yaml
+import numpy as np
 import pandas as pd
 import torch
 from torch_geometric.loader import DataLoader
@@ -87,7 +88,7 @@ print(f'Test loss: {test_loss:.4f}, Test MAE: {test_mae:.4f}')
 
 y_preds, y_trues = model.predict_batch(test_loader)
 
-plot_df = pd.DataFrame({'y_pred': y_preds[:, 0], 'y_true': y_trues[:, 0]})
+plot_df = pd.DataFrame({'y_pred': np.concatenate(y_preds), 'y_true': np.concatenate(y_trues)})
 figure = plt.figure(figsize=(4, 4))
 ax = sns.regplot(x='y_pred', y='y_true', data=plot_df)
 ax.set(xlabel='prediction', ylabel='ground truth')

@@ -99,8 +99,6 @@ class GNN(nn.Module):
       for data in loader:
         data = data.to(self.device)
         logits = self(data)
-        y_preds.append(logits)
-        y_trues.append(data.y)
         y_preds += tensor_to_list(logits)
         y_trues += tensor_to_list(data.y)
       return y_preds, y_trues
