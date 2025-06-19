@@ -50,7 +50,7 @@ class Explainer(nn.Module):
         # the selection budget is the difference between the sparsity target and the L1 norm
         selection_budget = torch.abs(self.target_sparsity - L1_norm)
         # the custom actor loss is the sum of the reward and the selection budget
-        custom_actor_loss = (reward + 0.01 * selection_budget) * cross_entropy
+        custom_actor_loss = (reward + 0.1 * selection_budget) * cross_entropy
         return torch.mean(custom_actor_loss)
 
     def forward(self, data):
@@ -63,7 +63,7 @@ class Explainer(nn.Module):
     def train_batch(self, loader):
         self.baseline.eval()
         self_losses, sparsities = [], []
-        pos_losses, neg_losses, pos_maes, neg_maes = [], [], [], []
+        pos_losses, neg_losses, pos_maes, neg_maes, pos_r2s, neg_r2s = [], [], [], [], [], []
         for data in loader:
             data = data.to(self.device)
             with torch.no_grad():
@@ -107,16 +107,22 @@ class Explainer(nn.Module):
         sparsities.append(mask.mean().item())
         pos_losses.append(pos_loss.mean().item())
         neg_losses.append(neg_loss.mean().item())
-        pos_mae = F.l1_loss(pos_logits, baseline_logits)
-        neg_mae = F.l1_loss(neg_logits, baseline_logits)
+        pos_mae = self.baseline.mae(pos_logits, baseline_logits)
+        neg_mae = self.baseline.mae(neg_logits, baseline_logits)
         pos_maes.append(pos_mae.item())
         neg_maes.append(neg_mae.item())
+        pos_r2 = self.baseline.r2_score(pos_logits, baseline_logits)
+        neg_r2 = self.baseline.r2_score(neg_logits, baseline_logits)
+        pos_r2s.append(pos_r2.item())
+        neg_r2s.append(neg_r2.item())
         return sum(self_losses) / len(self_losses), \
             sum(sparsities) / len(sparsities), \
                 sum(pos_losses) / len(pos_losses), \
                     sum(neg_losses) / len(neg_losses), \
                         sum(pos_maes) / len(pos_maes), \
-                            sum(neg_maes) / len(neg_maes)
+                            sum(neg_maes) / len(neg_maes), \
+                                sum(pos_r2s) / len(pos_r2s), \
+                                    sum(neg_r2s) / len(neg_r2s)
     
     @torch.no_grad()
     def test_batch(self, loader):
@@ -125,12 +131,12 @@ class Explainer(nn.Module):
         self.baseline.eval()
         self.eval()
         self_losses, sparsities = [], []
-        pos_losses, neg_losses, pos_maes, neg_maes = [], [], [], []
+        pos_losses, neg_losses, pos_maes, neg_maes, pos_r2s, neg_r2s = [], [], [], [], [], []
         for data in loader:
             data = data.to(self.device)
             baseline_logits = self.baseline(data)
             probs = torch.sigmoid(self(data))
-            mask = (probs > 0.5).float()
+            mask = torch.bernoulli(probs) # (probs > 0.5).float()
             pos_logits = self.pos_predictor(apply_mask(data, mask))
             neg_logits = self.neg_predictor(apply_mask(data, 1.0 - mask))
             pos_loss = self.pos_predictor.criterion(pos_logits, baseline_logits, reduction='none')
@@ -141,16 +147,22 @@ class Explainer(nn.Module):
             sparsities.append(mask.mean().item())
             pos_losses.append(pos_loss.mean().item())
             neg_losses.append(neg_loss.mean().item())
-            pos_mae = F.l1_loss(pos_logits, baseline_logits)
-            neg_mae = F.l1_loss(neg_logits, baseline_logits)
+            pos_mae = self.baseline.mae(pos_logits, baseline_logits)
+            neg_mae = self.baseline.mae(neg_logits, baseline_logits)
             pos_maes.append(pos_mae.item())
             neg_maes.append(neg_mae.item())
+            pos_r2 = self.baseline.r2_score(pos_logits, baseline_logits)
+            neg_r2 = self.baseline.r2_score(neg_logits, baseline_logits)
+            pos_r2s.append(pos_r2.item())
+            neg_r2s.append(neg_r2.item())
         return sum(self_losses) / len(self_losses), \
             sum(sparsities) / len(sparsities), \
                 sum(pos_losses) / len(pos_losses), \
                     sum(neg_losses) / len(neg_losses), \
                         sum(pos_maes) / len(pos_maes), \
-                            sum(neg_maes) / len(neg_maes)
+                            sum(neg_maes) / len(neg_maes), \
+                                sum(pos_r2s) / len(pos_r2s), \
+                                    sum(neg_r2s) / len(neg_r2s)
 
     @torch.no_grad()
     def predict_batch(self, loader):
@@ -163,7 +175,7 @@ class Explainer(nn.Module):
         for data in loader:
             data = data.to(self.device)
             probs = torch.sigmoid(self(data))
-            mask = (probs > 0.5).float()
+            mask = torch.bernoulli(probs) # (probs > 0.5).float()
             y_probs += tensor_batch_to_list(probs, data.batch)
             y_masks += tensor_batch_to_list(mask, data.batch)
             pos_pred = self.pos_predictor(apply_mask(data, mask))

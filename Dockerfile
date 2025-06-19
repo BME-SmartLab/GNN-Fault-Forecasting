@@ -21,6 +21,6 @@ WORKDIR /home/$USERNAME/GNN-Fault-Forecasting
 USER $USERNAME
 
 RUN pip install pyg_lib torch_scatter torch_sparse torch_cluster torch_spline_conv -f https://data.pyg.org/whl/torch-2.0.0+cu117.html torch_geometric
-RUN pip install debugpy pytest tensorboardX matplotlib seaborn pandas
+RUN pip install debugpy pytest torchmetrics tensorboardX matplotlib seaborn pandas
 
 EXPOSE 6006

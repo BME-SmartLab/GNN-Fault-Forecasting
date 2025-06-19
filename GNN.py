@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torch_geometric.nn as gnn
+from torchmetrics import R2Score, MeanAbsoluteError
 from GNLayer import GNLayer
 from utilities import tensor_to_list
 
@@ -49,6 +50,9 @@ class GNN(nn.Module):
       self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
       if self.device != torch.device('cuda'):
         print('WARNING: GPU not available. Using CPU instead.')
+      self.mae = MeanAbsoluteError()
+      self.r2_score = R2Score()
+      self.criterion = F.mse_loss
       self.to(self.device)
       self.optimizer =  torch.optim.Adam(self.parameters(), lr=learning_rate)
       self.criterion = F.mse_loss
@@ -63,8 +67,7 @@ class GNN(nn.Module):
 
     def train_batch(self, loader):
       self.train()
-      losses = []
-      maes = []
+      losses, maes, r2s = [], [], []
       for data in loader:
         data = data.to(self.device)
         self.optimizer.zero_grad()
@@ -73,23 +76,26 @@ class GNN(nn.Module):
         loss.backward()
         self.optimizer.step()
         losses.append(loss.item())
-        mae = F.l1_loss(logits, data.y)
+        mae = self.mae(logits, data.y)
         maes.append(mae.item())
-      return sum(losses)/len(losses), sum(maes)/len(maes)
+        r2 = self.r2_score(logits, data.y)
+        r2s.append(r2.item())
+      return sum(losses)/len(losses), sum(maes)/len(maes), sum(r2s)/len(r2s)
 
     @torch.no_grad()
     def test_batch(self, loader):
       self.eval()
-      losses = []
-      maes = []
+      losses, maes, r2s = [], [], []
       for data in loader:
         data = data.to(self.device)
         logits = self(data)
         loss = self.criterion(logits, data.y)
         losses.append(loss.item())
-        mae = F.l1_loss(logits, data.y)
+        mae = self.mae(logits, data.y)
         maes.append(mae.item())
-      return sum(losses)/len(losses), sum(maes)/len(maes)
+        r2 = self.r2_score(logits, data.y)
+        r2s.append(r2.item())
+      return sum(losses)/len(losses), sum(maes)/len(maes), sum(r2s)/len(r2s)
 
     @torch.no_grad()
     def predict_batch(self, loader):

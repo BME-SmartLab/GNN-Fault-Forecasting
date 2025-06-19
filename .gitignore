@@ -1,6 +1,7 @@
 __pycache__
 runs
 explainability_runs
+visualizations
 data/rest-tree3/data/processed/*
 data/rest-tree4/data/processed/*
 *.pth

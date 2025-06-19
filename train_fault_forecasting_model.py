@@ -10,7 +10,7 @@ from tensorboardX import SummaryWriter
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-torch.manual_seed(123)
+# torch.manual_seed(123)
 
 # Load hyperparameters from a YAML file
 config_path = os.path.expanduser('~/GNN-Fault-Forecasting/config.yaml')
@@ -65,24 +65,26 @@ model = GNN(
 if train:
     best_val_mae = float('inf')
     for epoch in range(epochs):
-        train_loss, train_mae = model.train_batch(train_loader)
-        val_loss, val_mae = model.test_batch(val_loader)
+        train_loss, train_mae, train_r2 = model.train_batch(train_loader)
+        val_loss, val_mae, val_r2 = model.test_batch(val_loader)
         if val_mae < best_val_mae:
             best_val_mae = val_mae
             torch.save(model.state_dict(), os.path.join(log_path, 'gnn.pt'))
         writer.add_scalar('train_loss', train_loss, epoch)
         writer.add_scalar('train_mae', train_mae, epoch)
+        writer.add_scalar('train_r2', train_r2, epoch)
         writer.add_scalar('val_loss', val_loss, epoch)
         writer.add_scalar('val_mae', val_mae, epoch)
-        print(f'Epoch: {epoch:03d}, Train loss: {train_loss:.4f}, Train MAE: {train_mae:.4f}, Val loss: {val_loss:.4f}, Val MAE: {val_mae:.4f}')
+        writer.add_scalar('val_r2', val_r2, epoch)
+        print(f'Epoch: {epoch:03d}, Train loss: {train_loss:.4f}, Train MAE: {train_mae:.4f}, Train R2: {train_r2:.4f}, Val loss: {val_loss:.4f}, Val MAE: {val_mae:.4f}, Val R2: {val_r2:.4f}')
 
     writer.close()
 
 model.load_state_dict(torch.load(os.path.join(log_path, 'gnn.pt'), weights_only=True))
-val_loss, val_mae = model.test_batch(val_loader)
-print(f'Val loss: {val_loss:.4f}, Val MAE: {val_mae:.4f}')
-test_loss, test_mae = model.test_batch(test_loader)
-print(f'Test loss: {test_loss:.4f}, Test MAE: {test_mae:.4f}')
+val_loss, val_mae, val_r2 = model.test_batch(val_loader)
+print(f'Val loss: {val_loss:.4f}, Val MAE: {val_mae:.4f}, Val R2: {val_r2:.4f}')
+test_loss, test_mae, test_r2 = model.test_batch(test_loader)
+print(f'Test loss: {test_loss:.4f}, Test MAE: {test_mae:.4f}, Test R2: {test_r2:.4f}')
 
 # Regression plot
 
