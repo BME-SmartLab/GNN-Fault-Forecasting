@@ -12,7 +12,7 @@ from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 import warnings
 warnings.filterwarnings("ignore", category=RuntimeWarning)
 
-torch.manual_seed(123)
+# torch.manual_seed(123)
 
 # Load hyperparameters from a YAML file
 config_path = os.path.expanduser('~/GNN-Fault-Forecasting/config.yaml')
@@ -69,7 +69,7 @@ def compute_spectral_features(data, n_components, num_buckets):
         A[i, j] = 1
         A[j, i] = 1
     embedder = SpectralEmbedding(n_components=n_components, affinity='precomputed')
-    embedding = embedder.fit_transform(A)
+    embedding = embedder.fit_transform(A)[:, :24]
     embedding = torch.from_numpy(embedding).float()
 
     bucket_list = []
