@@ -5,7 +5,7 @@ This repository contains supplementary materials for the paper:
 <b>
   R. Lovas, E. Rigó, D. Unyi, B. Gyires-Tóth
   
-  Explainable GNN-based Approach to Fault Forecasting in Cloud Service Debugging (under review)
+  Explainable GNN-based Approach to Fault Forecasting in Cloud Service Debugging
 </b>
 
 If you need more data, code or information about our work, please contact the corresponding author: Róbert Lovas (robert.lovas (at) sztaki.hu)
@@ -38,7 +38,7 @@ If you use our code or results, please cite our paper:
 
 ```
 @article{
-  to-be-published
+  R. Lovas, E. Rigó, D. Unyi, & B. Gyires-Tóth (2025). Explainable GNN-based Approach to Fault Forecasting in Cloud Service Debugging. IEEE Transactions on Network and Service Management.
 }
 
 ```
